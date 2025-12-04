@@ -1,10 +1,11 @@
 'use client'
 
-import { Search, Bell, Settings } from 'lucide-react'
+import { Search, Settings } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuthStore } from '@/store/auth'
+import { NotificationCenter } from '@/components/notifications/NotificationCenter'
 
 export function Header() {
   const { user } = useAuthStore()
@@ -29,13 +30,7 @@ export function Header() {
 
       {/* Actions */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-2 top-2 flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-error opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-error"></span>
-          </span>
-        </Button>
+        <NotificationCenter />
 
         <Button variant="ghost" size="icon">
           <Settings className="h-5 w-5" />

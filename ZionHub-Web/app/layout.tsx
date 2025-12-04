@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -18,7 +19,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster position="top-right" richColors />
+      </body>
     </html>
   )
 }
