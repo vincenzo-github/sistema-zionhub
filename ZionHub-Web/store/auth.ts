@@ -1,6 +1,15 @@
 import { create } from 'zustand';
 import { User } from '@/types';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+
+interface DecodedToken {
+  userId: string;
+  email: string;
+  full_name: string;
+  role: string;
+  church_id: string;
+}
 
 interface AuthStore {
   user: User | null;
@@ -43,7 +52,29 @@ export const useAuthStore = create<AuthStore>((set) => ({
   hydrate: () => {
     const token = Cookies.get('auth_token');
     if (token) {
-      set({ token });
+      try {
+        const decoded = jwtDecode<DecodedToken>(token);
+        const user: User = {
+          id: decoded.userId,
+          email: decoded.email,
+          full_name: decoded.full_name,
+          role: decoded.role,
+          church_id: decoded.church_id,
+        };
+        set({ 
+          token,
+          user,
+          isAuthenticated: true,
+        });
+      } catch (error) {
+        console.error('Failed to decode token:', error);
+        Cookies.remove('auth_token');
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        });
+      }
     }
   },
 }));
