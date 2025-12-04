@@ -2,10 +2,6 @@ import QRCode from 'qrcode'
 import { logger } from '../config/logger'
 
 export class CheckinService {
-  /**
-   * Gera QR Code para um evento
-   * O QR Code contém: ZIONHUB:EVENT:{eventId}:{timestamp}
-   */
   async generateQRCode(
     eventId: string,
     frontendUrl: string
@@ -14,23 +10,8 @@ export class CheckinService {
       const timestamp = Date.now()
       const qrcodeData = `ZIONHUB:EVENT:${eventId}:${timestamp}`
 
-      // Gerar URL com dados do check-in
-      const checkinUrl = `${frontendUrl}/eventos/${eventId}/checkin?qr=${encodeURIComponent(
-        qrcodeData
-      )}`
-
-      // Gerar imagem QR Code como data URL
-      const qrcodeUrl = await QRCode.toDataURL(checkinUrl, {
-        errorCorrectionLevel: 'H',
-        type: 'image/png',
-        quality: 0.95,
-        margin: 1,
-        width: 300,
-        color: {
-          dark: '#1E5F74', // ZionHub primary color
-          light: '#ffffff',
-        },
-      })
+      const checkinUrl = `${frontendUrl}/events/${eventId}/checkin?qr=${encodeURIComponent(qrcodeData)}`
+      const qrcodeUrl = await QRCode.toDataURL(checkinUrl)
 
       logger.info(`QR Code generated for event: ${eventId}`)
 
@@ -44,9 +25,6 @@ export class CheckinService {
     }
   }
 
-  /**
-   * Valida dados do QR Code
-   */
   validateQRCode(qrcodeData: string): { valid: boolean; eventId?: string } {
     try {
       const parts = qrcodeData.split(':')
@@ -58,9 +36,8 @@ export class CheckinService {
       const eventId = parts[2]
       const timestamp = parseInt(parts[3], 10)
 
-      // QR Code válido por 24 horas
       const qrcodeAge = Date.now() - timestamp
-      const maxAge = 24 * 60 * 60 * 1000 // 24 horas
+      const maxAge = 24 * 60 * 60 * 1000
 
       if (qrcodeAge > maxAge) {
         logger.warn(`QR Code expired for event: ${eventId}`)
@@ -74,38 +51,29 @@ export class CheckinService {
     }
   }
 
-  /**
-   * Calcula duração do evento em minutos
-   */
   calculateDuration(checkInTime: string, checkOutTime: string): number {
     try {
       const checkIn = new Date(checkInTime).getTime()
       const checkOut = new Date(checkOutTime).getTime()
-      return Math.round((checkOut - checkIn) / (1000 * 60)) // em minutos
+      return Math.round((checkOut - checkIn) / (1000 * 60))
     } catch (err) {
       logger.error('CheckinService.calculateDuration error:', err)
       return 0
     }
   }
 
-  /**
-   * Determina se check-in foi antecipado (chegou 15+ minutos antes)
-   */
   isEarlyArrival(eventStartTime: string, checkInTime: string): boolean {
     try {
       const eventStart = new Date(eventStartTime).getTime()
       const checkIn = new Date(checkInTime).getTime()
       const minutesDifference = (eventStart - checkIn) / (1000 * 60)
-      return minutesDifference >= 15 // Pelo menos 15 minutos antes
+      return minutesDifference >= 15
     } catch (err) {
       logger.error('CheckinService.isEarlyArrival error:', err)
       return false
     }
   }
 
-  /**
-   * Gera relatório de presença do evento
-   */
   generateAttendanceReport(records: any[]): {
     totalExpected: number
     totalCheckedIn: number

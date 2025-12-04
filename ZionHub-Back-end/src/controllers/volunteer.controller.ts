@@ -78,14 +78,14 @@ export class VolunteerController {
       }
 
       // Create user account for volunteer
-      const volunteer = await this.userStorage.createUser(
-        req.churchId!,
+      const volunteer = await this.userStorage.createUser({
+        church_id: req.churchId!,
         email,
         full_name,
-        Math.random().toString(36).slice(-8), // Generate random temporary password
-        'member',
-        false
-      );
+        password: Math.random().toString(36).slice(-8),
+        role: 'member',
+        status: "active"
+      });
 
       // Update with additional volunteer fields
       const updated = await this.volunteerStorage.updateVolunteer(

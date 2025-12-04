@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import api from '@/lib/api'
 import { Church } from '@/types'
@@ -17,15 +17,18 @@ export default function SettingsPage() {
   const { data: church, isLoading } = useQuery<Church>({
     queryKey: ['church'],
     queryFn: () => api.get('/church').then((res) => res.data),
-    onSuccess: (data) => {
-      setFormData({
-        name: data.name,
-        email: data.email,
-        phone: data.phone || '',
-        whatsapp: data.whatsapp || '',
-      })
-    },
   })
+
+  useEffect(() => {
+    if (church) {
+      setFormData({
+        name: church.name,
+        email: church.email,
+        phone: church.phone || '',
+        whatsapp: church.whatsapp || '',
+      })
+    }
+  }, [church])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({

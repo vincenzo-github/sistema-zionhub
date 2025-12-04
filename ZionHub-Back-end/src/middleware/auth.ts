@@ -8,6 +8,7 @@ export function authMiddleware(
   res: Response,
   next: NextFunction
 ) {
+  // @ts-ignore
   const token = req.headers.authorization?.replace('Bearer ', '');
 
   if (!token) {

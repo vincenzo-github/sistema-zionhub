@@ -34,12 +34,15 @@ const transports = [
 // Adicionar file logging em produção
 if (process.env.NODE_ENV === 'production') {
   transports.push(
+  // @ts-ignore
     new winston.transports.File({
       filename: 'logs/error.log',
       level: 'error',
     })
   );
+  // @ts-ignore
   transports.push(
+    // @ts-ignore
     new winston.transports.File({
       filename: 'logs/all.log',
     })

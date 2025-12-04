@@ -60,7 +60,7 @@ export class DashboardStorage {
         .eq('user.church_id', churchId);
 
       const gamificationPoints = pointsData?.reduce(
-        (sum, item) => sum + (item.points || 0),
+        (sum: number, item: any) => sum + (item.points || 0),
         0
       ) || 0;
 
@@ -108,7 +108,7 @@ export class DashboardStorage {
         .eq('user_id', userId);
 
       const totalPoints = userPoints?.reduce(
-        (sum, item) => sum + (item.points || 0),
+        (sum: number, item: any) => sum + (item.points || 0),
         0
       ) || 0;
 
@@ -152,10 +152,10 @@ export class DashboardStorage {
       // Count assignments by status
       const stats = {
         total: assignments?.length || 0,
-        pending: assignments?.filter((a) => a.status === 'pending').length || 0,
-        confirmed: assignments?.filter((a) => a.status === 'confirmed').length || 0,
-        checked_in: assignments?.filter((a) => a.status === 'checked_in').length || 0,
-        no_show: assignments?.filter((a) => a.status === 'no_show').length || 0,
+        pending: assignments?.filter((a: any) => a.status === 'pending').length || 0,
+        confirmed: assignments?.filter((a: any) => a.status === 'confirmed').length || 0,
+        checked_in: assignments?.filter((a: any) => a.status === 'checked_in').length || 0,
+        no_show: assignments?.filter((a: any) => a.status === 'no_show').length || 0,
       };
 
       return {
