@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { UserGamification } from '@/components/gamification/UserGamification'
-import { LeaderboardList } from '@/components/gamification/LeaderboardList'
+import UserGamification from '@/components/gamification/UserGamification'
+import LeaderboardList from '@/components/gamification/LeaderboardList'
 import { useGamification } from '@/hooks/useGamification'
 import { useLeaderboard } from '@/hooks/useLeaderboard'
 import { Zap, Trophy, RefreshCw } from 'lucide-react'
