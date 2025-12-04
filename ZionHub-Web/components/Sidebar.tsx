@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   X,
+  BookOpen,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -23,6 +24,7 @@ export default function Sidebar() {
     { href: '/dashboard', label: 'Dashboard', icon: Home },
     { href: '/dashboard/eventos', label: 'Eventos', icon: Calendar },
     { href: '/dashboard/voluntarios', label: 'Voluntários', icon: Users },
+    { href: '/dashboard/ministerios', label: 'Ministérios', icon: BookOpen },
     { href: '/dashboard/settings', label: 'Configurações', icon: Settings },
   ]
 

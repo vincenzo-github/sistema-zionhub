@@ -13,6 +13,7 @@ import churchRoutes from './routes/church.routes';
 import eventRoutes from './routes/event.routes';
 import assignmentRoutes from './routes/assignment.routes';
 import volunteerRoutes from './routes/volunteer.routes';
+import ministryRoutes from './routes/ministry.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 
 const app = express();
@@ -47,6 +48,7 @@ app.use('/api/churches', churchRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/volunteers', volunteerRoutes);
+app.use('/api/ministries', ministryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 // 404 handler
