@@ -1,0 +1,202 @@
+# ═══════════════════════════════════════════════════════
+# ZIONHUB - GITIGNORE CONFIGURATION
+# ═══════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════
+# DEPENDENCIES - NUNCA FAZER COMMIT
+# ═══════════════════════════════════════════════════════
+node_modules/
+.pnp
+.pnp.js
+pnpm-workspace.yaml
+
+# ═══════════════════════════════════════════════════════
+# ENVIRONMENT & SECRETS - NUNCA FAZER COMMIT
+# ═══════════════════════════════════════════════════════
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.test.local
+.env.development.local
+.env.*.secret
+
+# ═══════════════════════════════════════════════════════
+# BUILD & OUTPUT DIRECTORIES
+# ═══════════════════════════════════════════════════════
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+.turbo/
+.vite/
+.parcel-cache/
+.parcel/
+
+# ═══════════════════════════════════════════════════════
+# TYPESCRIPT
+# ═══════════════════════════════════════════════════════
+*.tsbuildinfo
+tsconfig.json.bak
+
+# ═══════════════════════════════════════════════════════
+# TESTING & COVERAGE
+# ═══════════════════════════════════════════════════════
+coverage/
+.nyc_output/
+*.lcov
+.jest-coverage/
+.mocha_output/
+
+# ═══════════════════════════════════════════════════════
+# LOGS & DEBUG
+# ═══════════════════════════════════════════════════════
+logs/
+*.log
+npm-debug.log*
+npm-error.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+pnpm-error.log*
+lerna-debug.log*
+.debuglog
+debug.log
+
+# ═══════════════════════════════════════════════════════
+# RUNTIME & PROCESS
+# ═══════════════════════════════════════════════════════
+.pid
+*.pid
+*.seed
+*.pid.lock
+
+# ═══════════════════════════════════════════════════════
+# OPERATING SYSTEM
+# ═══════════════════════════════════════════════════════
+.DS_Store
+.DS_Store?
+._*
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ═══════════════════════════════════════════════════════
+# IDE & EDITOR
+# ═══════════════════════════════════════════════════════
+.vscode/
+.idea/
+.project
+.classpath
+*.swp
+*.swo
+*~
+.editorconfig
+*.sublime-workspace
+*.sublime-project
+.IntelliJIdea*/
+.netbeans/
+.vim/
+.emacs*
+*.c9/
+*.iml
+.c9/
+*.sublime-workspace
+
+# ═══════════════════════════════════════════════════════
+# TEMPORARY FILES
+# ═══════════════════════════════════════════════════════
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+*.swp
+*~
+.tmp
+.temp
+
+# ═══════════════════════════════════════════════════════
+# PACKAGE MANAGER
+# ═══════════════════════════════════════════════════════
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp.cjs
+
+# ═══════════════════════════════════════════════════════
+# DATABASE
+# ═══════════════════════════════════════════════════════
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# ═══════════════════════════════════════════════════════
+# DOCKER
+# ═══════════════════════════════════════════════════════
+docker-compose.override.yml
+
+# ═══════════════════════════════════════════════════════
+# CACHE & LINTERS
+# ═══════════════════════════════════════════════════════
+.eslintcache
+.stylelintcache
+.prettierignore
+.cache/
+.eslint-cache/
+
+# ═══════════════════════════════════════════════════════
+# BUILD ARTIFACTS
+# ═══════════════════════════════════════════════════════
+*.tgz
+*.tar.gz
+dist-*
+build-*
+
+# ═══════════════════════════════════════════════════════
+# CREDENTIALS & SENSITIVE FILES
+# ═══════════════════════════════════════════════════════
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+secrets/
+credentials.json
+firebase-key.json
+
+# ═══════════════════════════════════════════════════════
+# MACOS SPECIFIC
+# ═══════════════════════════════════════════════════════
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ═══════════════════════════════════════════════════════
+# WINDOWS SPECIFIC
+# ═══════════════════════════════════════════════════════
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# ═══════════════════════════════════════════════════════
+# SYSTEM FILES
+# ═══════════════════════════════════════════════════════
+.env.test
+.env.testing
+.cache
+.parcel-cache
+.parcel-cache/*
