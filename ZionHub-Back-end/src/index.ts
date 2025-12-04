@@ -17,6 +17,7 @@ import ministryRoutes from './routes/ministry.routes';
 import notificationRoutes from './routes/notification.routes';
 import checkinRoutes from './routes/checkin.routes';
 import dashboardRoutes from './routes/dashboard.routes';
+import gamificationRoutes from './routes/gamification.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -54,6 +55,7 @@ app.use('/api/ministries', ministryRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/checkin', checkinRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/gamification', gamificationRoutes);
 
 // 404 handler
 app.use((req, res) => {
