@@ -11,7 +11,7 @@ interface UseGamificationReturn {
   refetch: () => Promise<void>
 }
 
-export function useGamification(userId?: string): UseGamificationReturn {
+export function useGamification(): UseGamificationReturn {
   const [stats, setStats] = useState<GamificationStats | null>(null)
   const [allBadges, setAllBadges] = useState<Badge[]>([])
   const [userBadges, setUserBadges] = useState<UserBadge[]>([])
@@ -19,17 +19,12 @@ export function useGamification(userId?: string): UseGamificationReturn {
   const [error, setError] = useState<string | null>(null)
 
   const fetchData = async () => {
-    if (!userId) {
-      setLoading(false)
-      return
-    }
-
     try {
       setLoading(true)
       setError(null)
 
       // Fetch user stats
-      const statsResponse = await api.get(`/gamification/users/${userId}/stats`)
+      const statsResponse = await api.get('/gamification/me')
       setStats(statsResponse.data)
 
       // Fetch all badges
@@ -37,7 +32,7 @@ export function useGamification(userId?: string): UseGamificationReturn {
       setAllBadges(badgesResponse.data)
 
       // Fetch user badges
-      const userBadgesResponse = await api.get(`/gamification/users/${userId}/badges`)
+      const userBadgesResponse = await api.get('/gamification/me/badges')
       setUserBadges(userBadgesResponse.data)
     } catch (err: any) {
       console.error('Error fetching gamification data:', err)
@@ -49,7 +44,7 @@ export function useGamification(userId?: string): UseGamificationReturn {
 
   useEffect(() => {
     fetchData()
-  }, [userId])
+  }, [])
 
   return {
     stats,

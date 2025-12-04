@@ -1,171 +1,151 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Trophy, User, RefreshCw } from 'lucide-react'
-import Cookies from 'js-cookie'
-import { jwtDecode } from 'jwt-decode'
-import UserGamification from '@/components/gamification/UserGamification'
-import LeaderboardList from '@/components/gamification/LeaderboardList'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { UserGamification } from '@/components/gamification/UserGamification'
+import { LeaderboardList } from '@/components/gamification/LeaderboardList'
 import { useGamification } from '@/hooks/useGamification'
 import { useLeaderboard } from '@/hooks/useLeaderboard'
-
-interface DecodedToken {
-  userId: string
-  email: string
-  role: string
-}
+import { Zap, Trophy, RefreshCw } from 'lucide-react'
 
 export default function GamificacaoPage() {
-  const [activeTab, setActiveTab] = useState<'profile' | 'leaderboard'>('profile')
-  const [userId, setUserId] = useState<string | undefined>()
-
-  useEffect(() => {
-    const token = Cookies.get('auth_token')
-    if (token) {
-      try {
-        const decoded = jwtDecode<DecodedToken>(token)
-        setUserId(decoded.userId)
-      } catch (error) {
-        console.error('Error decoding token:', error)
-      }
-    }
-  }, [])
+  const [activeTab, setActiveTab] = useState('profile')
 
   const {
     stats,
     allBadges,
     userBadges,
-    loading: gamificationLoading,
-    error: gamificationError,
-    refetch: refetchGamification,
-  } = useGamification(userId)
+    loading: userLoading,
+    error: userError,
+    refetch: refetchUser,
+  } = useGamification()
 
   const {
-    entries,
-    loading: leaderboardLoading,
+    entries: leaderboard,
+    isLoading: leaderboardLoading,
     error: leaderboardError,
     refetch: refetchLeaderboard,
-  } = useLeaderboard(activeTab === 'leaderboard')
+  } = useLeaderboard()
 
-  const handleRefresh = () => {
-    if (activeTab === 'profile') {
-      refetchGamification()
-    } else {
-      refetchLeaderboard()
-    }
+  const earnedBadgeIds = new Set(userBadges.map(b => b.badge_id))
+  const nextBadge = allBadges.find(
+    badge => !earnedBadgeIds.has(badge.id)
+  )
+  const pointsToNextBadge = nextBadge && stats
+    ? Math.max(0, nextBadge.points_required - stats.total_points)
+    : 0
+
+  const handleRefresh = async () => {
+    await refetchUser()
+    await refetchLeaderboard()
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Gamificação</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Acompanhe seu progresso e conquiste badges
+          <h1 className="text-3xl font-bold text-gray-900">Gamificação</h1>
+          <p className="text-gray-500 mt-2">
+            Acompanhe seu progresso e suba no ranking
           </p>
         </div>
-        <button
+
+        <Button
           onClick={handleRefresh}
-          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
-          disabled={gamificationLoading || leaderboardLoading}
+          variant="outline"
+          size="sm"
+          className="gap-2"
         >
-          <RefreshCw
-            className={`h-4 w-4 ${
-              gamificationLoading || leaderboardLoading ? 'animate-spin' : ''
-            }`}
-          />
+          <RefreshCw className="w-4 h-4" />
           Atualizar
+        </Button>
+      </div>
+
+      <div className="flex gap-2 border-b border-gray-200">
+        <button
+          onClick={() => setActiveTab('profile')}
+          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            activeTab === 'profile'
+              ? 'border-primary-500 text-primary-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <Zap className="w-4 h-4" />
+          Meu Perfil
+        </button>
+        <button
+          onClick={() => setActiveTab('leaderboard')}
+          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            activeTab === 'leaderboard'
+              ? 'border-primary-500 text-primary-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <Trophy className="w-4 h-4" />
+          Ranking
         </button>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
-        <nav className="-mb-px flex gap-6">
-          <button
-            onClick={() => setActiveTab('profile')}
-            className={`flex items-center gap-2 border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
-              activeTab === 'profile'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
-          >
-            <User className="h-4 w-4" />
-            Meu Perfil
-          </button>
-          <button
-            onClick={() => setActiveTab('leaderboard')}
-            className={`flex items-center gap-2 border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
-              activeTab === 'leaderboard'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
-          >
-            <Trophy className="h-4 w-4" />
-            Ranking
-          </button>
-        </nav>
-      </div>
-
-      {/* Content */}
-      <div className="min-h-[400px]">
+      <div>
         {activeTab === 'profile' && (
           <>
-            {gamificationLoading && (
-              <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                  <RefreshCw className="mx-auto h-8 w-8 animate-spin text-blue-600" />
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Carregando dados...
-                  </p>
-                </div>
+            {userError ? (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                <p className="text-red-900 font-medium">Erro ao carregar gamificação</p>
+                <p className="text-red-700 text-sm mt-2">{userError}</p>
               </div>
-            )}
-
-            {gamificationError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
-                <p className="text-sm text-red-600 dark:text-red-400">
-                  {gamificationError}
-                </p>
+            ) : userLoading ? (
+              <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+                <p className="text-gray-500">Carregando dados...</p>
               </div>
-            )}
-
-            {!gamificationLoading && !gamificationError && stats && (
+            ) : stats ? (
               <UserGamification
                 stats={stats}
+                badges={userBadges}
                 allBadges={allBadges}
-                userBadges={userBadges}
+                gameReport={{
+                  rankName: 'Membro',
+                  rankEmoji: '🏆',
+                  percentToNextRank: 0,
+                }}
+                nextBadge={nextBadge}
+                pointsToNextBadge={pointsToNextBadge}
+                isLoading={userLoading}
+                error={userError}
               />
+            ) : (
+              <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+                <p className="text-gray-500">
+                  Participe de eventos para começar a ganhar pontos!
+                </p>
+              </div>
             )}
           </>
         )}
 
         {activeTab === 'leaderboard' && (
           <>
-            {leaderboardLoading && (
-              <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                  <RefreshCw className="mx-auto h-8 w-8 animate-spin text-blue-600" />
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Carregando ranking...
-                  </p>
-                </div>
+            {leaderboardError ? (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                <p className="text-red-900 font-medium">Erro ao carregar ranking</p>
+                <p className="text-red-700 text-sm mt-2">{leaderboardError}</p>
               </div>
-            )}
-
-            {leaderboardError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
-                <p className="text-sm text-red-600 dark:text-red-400">
-                  {leaderboardError}
-                </p>
-              </div>
-            )}
-
-            {!leaderboardLoading && !leaderboardError && (
-              <LeaderboardList entries={entries} currentUserId={userId} />
+            ) : (
+              <LeaderboardList
+                entries={leaderboard}
+                isLoading={leaderboardLoading}
+              />
             )}
           </>
         )}
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p className="text-sm text-blue-900">
+          <span className="font-semibold">Como funciona:</span> Ganhe pontos participando de eventos
+          (baseado na duração), desbloqueie badges conforme atinge marcos de pontos,
+          e suba no ranking global!
+        </p>
       </div>
     </div>
   )
