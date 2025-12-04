@@ -21,9 +21,9 @@ export default function Sidebar() {
 
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: Home },
-    { href: '/events', label: 'Eventos', icon: Calendar },
-    { href: '/volunteers', label: 'Voluntários', icon: Users },
-    { href: '/settings', label: 'Configurações', icon: Settings },
+    { href: '/dashboard/eventos', label: 'Eventos', icon: Calendar },
+    { href: '/dashboard/voluntarios', label: 'Voluntários', icon: Users },
+    { href: '/dashboard/settings', label: 'Configurações', icon: Settings },
   ]
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
