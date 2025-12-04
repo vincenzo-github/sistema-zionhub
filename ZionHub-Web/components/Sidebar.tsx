@@ -25,7 +25,7 @@ export default function Sidebar() {
     { href: '/dashboard/eventos', label: 'Eventos', icon: Calendar },
     { href: '/dashboard/voluntarios', label: 'Voluntários', icon: Users },
     { href: '/dashboard/ministerios', label: 'Ministérios', icon: BookOpen },
-    { href: '/dashboard/settings', label: 'Configurações', icon: Settings },
+    { href: '/dashboard/configuracoes', label: 'Configurações', icon: Settings },
   ]
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
